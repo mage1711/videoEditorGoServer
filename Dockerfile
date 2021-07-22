@@ -11,9 +11,6 @@ RUN go mod download
 # Copy the source code
 COPY *.go ./
 
-RUN apt-get -y update
-
-RUN apt-get install -y ffmpeg
 # Build
 RUN go build -o /videoEditorGoServer
 
