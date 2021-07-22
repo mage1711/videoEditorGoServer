@@ -14,26 +14,21 @@ type Clip struct {
 	concatListCache string
 }
 
-func editVideo() {
-	//buf := &bytes.Buffer{}
-	//fmt.Println("generating")
-	//_ = fluentffmpeg.NewCommand("").
-	//	InputPath("videos/test.mp4").
-	//	OutputFormat("avi").
-	//	OutputPath("videos/r.avi").
-	//	Overwrite(true).
-	//	Run()
-	//fmt.Println("done")
-	//out, _ := ioutil.ReadAll(buf) // read logs
-	//fmt.Println(string(out))
+func editVideo(videoList []map[string]interface{}) {
 	fmt.Println("generating")
 	var videos []string
-	videos = append(videos, "videos/test.mp4")
-	videos = append(videos, "videos/test2.mp4")
+	for _, element := range videoList {
+		var name = element["name"].(string)
+		if element["video_found"].(bool) {
+			videos = append(videos, folderName+"/"+name+".mp4")
+		}
+	}
+
+	fmt.Println(videos)
 
 	clip, _ := NewClip(videos)
-	//clip.saveConcatenateList()
-	clip.Concatenate("concat.mp4")
+
+	clip.Concatenate(resVideoName)
 
 }
 func NewClip(videoPath []string) (*Clip, error) {

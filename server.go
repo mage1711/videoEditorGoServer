@@ -21,9 +21,9 @@ type Item struct {
 }
 
 var folderName = "videos"
-var maxSize = 209715200
-
-const YOUTUBE_API_KEY = "AIzaSyA7s6rv1gzBHF3GmRPQuG4YrKZv6D4ig-g"
+var resVideoName = "res.mp4"
+var resVideoPath = folderName + "/" + resVideoName
+var maxSize = 309715200
 
 func helloHandler(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/hello" {
@@ -49,11 +49,20 @@ func getList(rw http.ResponseWriter, req *http.Request) {
 	getVideos(data)
 	fmt.Println(data[0]["name"])
 }
-func generate(rw http.ResponseWriter, req *http.Request) {
-	editVideo()
+func generate(w http.ResponseWriter, req *http.Request) {
+	responseBody, _ := ioutil.ReadAll(req.Body)
+	var data []map[string]interface{}
+	err := json.Unmarshal([]byte(responseBody), &data)
+	if err != nil {
+		panic(err)
+	}
+	getVideos(data)
+	editVideo(data)
+	var link = uploadToCdn(resVideoPath)
+	fmt.Fprintf(w, link)
 }
 func upload(rw http.ResponseWriter, req *http.Request) {
-	uploadToCdn()
+	uploadToCdnTest()
 }
 func main() {
 	http.HandleFunc("/videolist", getList)  // Update this line of code
