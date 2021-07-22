@@ -58,8 +58,8 @@ func generate(w http.ResponseWriter, req *http.Request) {
 	}
 	getVideos(data)
 	editVideo(data)
-	var link = uploadToCdn(resVideoPath)
-	fmt.Fprintf(w, link)
+	//var link = uploadToCdn(resVideoPath)
+	//fmt.Fprintf(w, link)
 }
 func upload(rw http.ResponseWriter, req *http.Request) {
 	uploadToCdnTest()
