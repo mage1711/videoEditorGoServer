@@ -4,9 +4,12 @@ FROM golang:1.16-alpine
 WORKDIR /app
 
 # Download Go modules
-COPY go.mod .
-COPY go.sum .
+COPY go.mod ./
+COPY go.sum ./
 RUN go mod download
+RUN apk update
+RUN apk upgrade
+RUN apk add ffmpeg
 
 # Copy the source code
 COPY *.go ./

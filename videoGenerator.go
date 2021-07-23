@@ -21,13 +21,13 @@ func editVideo(videoList []map[string]interface{}) {
 		var name = element["name"].(string)
 		if element["video_found"].(bool) {
 			videos = append(videos, folderName+"/"+name+".mp4")
+			//videos = append(videos,name+".mp4")
 		}
 	}
 
 	fmt.Println(videos)
 
 	clip, _ := NewClip(videos)
-
 	clip.Concatenate(resVideoName)
 
 }
@@ -52,7 +52,7 @@ func (c *Clip) saveConcatenateList() error {
 	}
 	defer f.Close()
 	for _, video := range c.videosPath {
-		fmt.Fprintf(f, "file '%s'\n%s\n", filepath.Join(video), maxLengthPerVideo)
+		fmt.Fprintf(f, "file '%s'\n%s\n", filepath.Base(video), maxLengthPerVideo)
 	}
 	return nil
 }
@@ -62,8 +62,9 @@ func (c *Clip) Concatenate(output string) error {
 }
 func (c *Clip) ConcatenateWithStreams(output string, os io.Writer, es io.Writer) error {
 	c.saveConcatenateList()
-	defer c.deleteConcatenateList()
+	//defer c.deleteConcatenateList()
 	line := c.CommandLine(output)
+	fmt.Println(line)
 	cmd := exec.Command(line[0], line[1:]...)
 	cmd.Stderr = es
 	cmd.Stdout = os

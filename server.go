@@ -50,16 +50,22 @@ func getList(rw http.ResponseWriter, req *http.Request) {
 	fmt.Println(data[0]["name"])
 }
 func generate(w http.ResponseWriter, req *http.Request) {
-	responseBody, _ := ioutil.ReadAll(req.Body)
-	var data []map[string]interface{}
-	err := json.Unmarshal([]byte(responseBody), &data)
-	if err != nil {
-		panic(err)
+	if req.Method == "POST" {
+		responseBody, _ := ioutil.ReadAll(req.Body)
+		var data []map[string]interface{}
+		err := json.Unmarshal([]byte(responseBody), &data)
+		if err != nil {
+			panic(err)
+		}
+		getVideos(data)
+		editVideo(data)
+		var link = uploadToCdn(resVideoPath)
+		fmt.Fprintf(w, link)
 	}
-	getVideos(data)
-	editVideo(data)
-	var link = uploadToCdn(resVideoPath)
-	fmt.Fprintf(w, link)
+	if req.Method == "GET" {
+		http.Error(w, "Method is not supported.", http.StatusNotFound)
+		return
+	}
 }
 func upload(rw http.ResponseWriter, req *http.Request) {
 	uploadToCdnTest()
