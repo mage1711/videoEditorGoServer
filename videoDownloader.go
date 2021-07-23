@@ -88,7 +88,7 @@ func getVideos(videoList []map[string]interface{}) {
 		os.Mkdir(folderName, 0755)
 	}
 	for _, element := range videoList {
-		var name = element["name"].(string)
+		var name = element["filename"].(string)
 
 		if element["video_found"].(bool) {
 			//var link = fmt.Sprintf("%v", element["video_url"])

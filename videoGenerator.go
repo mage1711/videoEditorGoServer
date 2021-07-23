@@ -18,7 +18,7 @@ func editVideo(videoList []map[string]interface{}) {
 	fmt.Println("generating")
 	var videos []string
 	for _, element := range videoList {
-		var name = element["name"].(string)
+		var name = element["filename"].(string)
 		if element["video_found"].(bool) {
 			videos = append(videos, folderName+"/"+name+".mp4")
 			//videos = append(videos,name+".mp4")
