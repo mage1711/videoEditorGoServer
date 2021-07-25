@@ -50,13 +50,20 @@ func getList(rw http.ResponseWriter, req *http.Request) {
 	fmt.Println(data[0]["name"])
 }
 func generate(w http.ResponseWriter, req *http.Request) {
+	w.Header().Add("Access-Control-Allow-Origin", "*")
+	w.Header().Add("Access-Control-Allow-Methods", "POST, OPTIONS, GET, DELETE, PUT")
+	w.Header().Add("Access-Control-Allow-Headers", "content-type")
+	fmt.Println("Request received")
+	fmt.Println(req.Method)
 	if req.Method == "POST" {
+		fmt.Println("Request received")
 		responseBody, _ := ioutil.ReadAll(req.Body)
 		var data []map[string]interface{}
 		err := json.Unmarshal([]byte(responseBody), &data)
 		if err != nil {
 			panic(err)
 		}
+		fmt.Println(data)
 		getVideos(data)
 		editVideo(data)
 		var link = uploadToCdn(resVideoPath)
