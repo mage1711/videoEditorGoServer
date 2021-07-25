@@ -98,6 +98,7 @@ func getVideos(videoList []map[string]interface{}) {
 			downloadVideo(name, link)
 			fmt.Println(name, link)
 		} else {
+			downloadFromYoutube(name)
 			fmt.Println(name)
 		}
 

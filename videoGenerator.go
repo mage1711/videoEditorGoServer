@@ -23,19 +23,22 @@ func editVideo(videoList []map[string]interface{}) {
 	var convetedVideoPath string
 	for _, element := range videoList {
 		var name = element["filename"].(string)
-		if element["video_found"].(bool) {
-			videoLength := 15 * 30
-			videoPath = folderName + "/" + name + ".mp4"
-			convetedVideoPath = folderName + "/" + name + " converted " + strconv.Itoa(videoLength) + ".mp4"
+
+		videoLength := 15 * 30
+		videoPath = folderName + "/" + name + ".mp4"
+		convetedVideoPath = folderName + "/" + name + " converted " + strconv.Itoa(videoLength) + ".mp4"
+		if _, err := os.Stat(convetedVideoPath); os.IsNotExist(err) {
 			_ = fluentffmpeg.NewCommand("").
 				InputPath(videoPath).
 				OutputFormat("mp4").
 				OutputPath(convetedVideoPath).VideoCodec("libx264").Preset("ultrafast").FrameRate(30).Resolution("1920x1080").VFrames(videoLength).
 				Overwrite(true).Run()
-			videos = append(videos, convetedVideoPath)
+		} else {
+			fmt.Println("already converted")
 		}
-	}
+		videos = append(videos, convetedVideoPath)
 
+	}
 	fmt.Println(videos)
 
 	clip, _ := NewClip(videos)
