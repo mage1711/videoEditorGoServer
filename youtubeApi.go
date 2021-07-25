@@ -28,7 +28,7 @@ func getYoutubeVideoLink(fileName string) string {
 	part := []string{"id", "snippet"}
 
 	call := service.Search.List(part).
-		Q(fileName + " trailer").
+		Q(fileName + " game trailer").
 		MaxResults(*maxResults)
 	response, err := call.Do()
 

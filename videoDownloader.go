@@ -67,7 +67,7 @@ func downloadFromYoutube(fileName string) {
 	log.Println(formatPosition)
 	log.Println(video.Formats[formatPosition].Quality)
 	resp, _, _ := client.GetStream(video, &video.Formats[formatPosition])
-	//resp, _, _ := client.GetStream(video, &video.Formats[formatPosition])
+
 	if err != nil {
 		panic(err)
 	}
