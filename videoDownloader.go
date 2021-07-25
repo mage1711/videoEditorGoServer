@@ -50,38 +50,42 @@ func downloadVideo(fileName string, url string) error {
 }
 
 func downloadFromYoutube(fileName string) {
-	var videoID = getYoutubeVideoLink(fileName)
-	log.Println("yt video link", videoID)
-	client := youtube.Client{}
+	if _, err := os.Stat(folderName + "/" + fileName + ".mp4"); os.IsNotExist(err) {
+		var videoID = getYoutubeVideoLink(fileName)
+		log.Println("yt video link", videoID)
+		client := youtube.Client{}
 
-	video, err := client.GetVideo(videoID)
-	if err != nil {
-		panic(err)
-	}
-	var formatPosition int
-	for index, element := range video.Formats {
-		if element.Quality == "hd1080" {
-			formatPosition = index
+		video, err := client.GetVideo(videoID)
+		if err != nil {
+			panic(err)
 		}
-	}
-	log.Println(formatPosition)
-	log.Println(video.Formats[formatPosition].Quality)
-	resp, _, _ := client.GetStream(video, &video.Formats[formatPosition])
+		var formatPosition int
+		for index, element := range video.Formats {
+			if element.Quality == "hd1080" {
+				formatPosition = index
+			}
+		}
+		log.Println(formatPosition)
+		log.Println(video.Formats[formatPosition].Quality)
+		resp, _, _ := client.GetStream(video, &video.Formats[formatPosition])
 
-	if err != nil {
-		panic(err)
-	}
-	defer resp.Close()
+		if err != nil {
+			panic(err)
+		}
+		defer resp.Close()
 
-	file, err := os.Create(folderName + "/" + fileName + ".mp4")
-	if err != nil {
-		panic(err)
-	}
-	defer file.Close()
+		file, err := os.Create(folderName + "/" + fileName + ".mp4")
+		if err != nil {
+			panic(err)
+		}
+		defer file.Close()
 
-	_, err = io.Copy(file, resp)
-	if err != nil {
-		panic(err)
+		_, err = io.Copy(file, resp)
+		if err != nil {
+			panic(err)
+		}
+	} else {
+		log.Println(fileName + " already downloaded")
 	}
 }
 
