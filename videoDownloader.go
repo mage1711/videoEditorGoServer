@@ -22,7 +22,8 @@ func downloadVideo(fileName string, url string) error {
 		size, _ := strconv.Atoi(resp.Header.Get("Content-Length"))
 		downloadSize := int(size)
 
-		if downloadSize < maxSize {
+		//if downloadSize < maxSize {
+		if false {
 			// Create the file
 			out, err := os.Create(folderName + "/" + fileName + ".mp4")
 			if err != nil {
