@@ -36,7 +36,7 @@ func NewClip(videoPath []string) (*Clip, error) {
 
 	for _, path := range videoPath {
 		if _, err := os.Stat(path); err != nil {
-			return nil, errors.New("cinema.Load: unable to load file: " + err.Error())
+			return nil, errors.New("unable to load file: " + err.Error())
 		}
 	}
 	dir := filepath.Dir(videoPath[0])

@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/kkdai/youtube/v2"
 	"io"
 	"log"
 	"net/http"
@@ -37,7 +38,7 @@ func downloadVideo(fileName string, url string) error {
 			log.Println(url, " is bigger than max size")
 			log.Println("Downloading youtube version")
 
-			//downloadFromYoutube(fileName)
+			downloadFromYoutube(fileName)
 		}
 		log.Println("Finished downloading ", fileName)
 		return err
@@ -48,39 +49,39 @@ func downloadVideo(fileName string, url string) error {
 }
 
 func downloadFromYoutube(fileName string) {
-	//var videoID = getYoutubeVideoLink(fileName)
-	//log.Println("yt video link",videoID)
-	//client := youtube.Client{}
-	//
-	//video, err := client.GetVideo(videoID)
-	//if err != nil {
-	//	panic(err)
-	//}
-	//var formatPosition int
-	//for index,element :=range video.Formats {
-	//	if element.Quality == "hd1080"{
-	//		formatPosition = index
-	//	}
-	//}
-	//log.Println(formatPosition)
-	//log.Println(video.Formats[formatPosition].Quality)
-	//resp, _, _ := client.GetStream(video,&video.Formats[formatPosition])
-	////resp, _, _ := client.GetStream(video, &video.Formats[formatPosition])
-	//if err != nil {
-	//	panic(err)
-	//}
-	//defer resp.Close()
-	//
-	//file, err := os.Create(folderName + "/" + fileName + ".mp4")
-	//if err != nil {
-	//	panic(err)
-	//}
-	//defer file.Close()
-	//
-	//_, err = io.Copy(file, resp)
-	//if err != nil {
-	//	panic(err)
-	//}
+	var videoID = getYoutubeVideoLink(fileName)
+	log.Println("yt video link", videoID)
+	client := youtube.Client{}
+
+	video, err := client.GetVideo(videoID)
+	if err != nil {
+		panic(err)
+	}
+	var formatPosition int
+	for index, element := range video.Formats {
+		if element.Quality == "hd1080" {
+			formatPosition = index
+		}
+	}
+	log.Println(formatPosition)
+	log.Println(video.Formats[formatPosition].Quality)
+	resp, _, _ := client.GetStream(video, &video.Formats[formatPosition])
+	//resp, _, _ := client.GetStream(video, &video.Formats[formatPosition])
+	if err != nil {
+		panic(err)
+	}
+	defer resp.Close()
+
+	file, err := os.Create(folderName + "/" + fileName + ".mp4")
+	if err != nil {
+		panic(err)
+	}
+	defer file.Close()
+
+	_, err = io.Copy(file, resp)
+	if err != nil {
+		panic(err)
+	}
 }
 
 func getVideos(videoList []map[string]interface{}) {

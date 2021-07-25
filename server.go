@@ -25,6 +25,8 @@ var resVideoName = "res.mp4"
 var resVideoPath = folderName + "/" + resVideoName
 var maxSize = 309715200
 
+const YOUTUBE_API_KEY = "AIzaSyA7s6rv1gzBHF3GmRPQuG4YrKZv6D4ig-g"
+
 func helloHandler(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/hello" {
 		http.Error(w, "404 not found.", http.StatusNotFound)
