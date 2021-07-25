@@ -23,7 +23,7 @@ type Item struct {
 var folderName = "videos"
 var resVideoName = "res.mp4"
 var resVideoPath = folderName + "/" + resVideoName
-var maxSize = 309715200
+var maxSize = 700000000
 
 const YOUTUBE_API_KEY = "AIzaSyA7s6rv1gzBHF3GmRPQuG4YrKZv6D4ig-g"
 
