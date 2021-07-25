@@ -3,10 +3,12 @@ package main
 import (
 	"errors"
 	"fmt"
+	fluentffmpeg "github.com/modfy/fluent-ffmpeg"
 	"io"
 	"os"
 	"os/exec"
 	"path/filepath"
+	"strconv"
 )
 
 type Clip struct {
@@ -17,11 +19,20 @@ type Clip struct {
 func editVideo(videoList []map[string]interface{}) {
 	fmt.Println("generating")
 	var videos []string
+	var videoPath string
+	var convetedVideoPath string
 	for _, element := range videoList {
 		var name = element["filename"].(string)
 		if element["video_found"].(bool) {
-			videos = append(videos, folderName+"/"+name+".mp4")
-			//videos = append(videos,name+".mp4")
+			videoLength := 15 * 30
+			videoPath = folderName + "/" + name + ".mp4"
+			convetedVideoPath = folderName + "/" + name + " converted " + strconv.Itoa(videoLength) + ".mp4"
+			_ = fluentffmpeg.NewCommand("").
+				InputPath(videoPath).
+				OutputFormat("mp4").
+				OutputPath(convetedVideoPath).VideoCodec("libx264").Preset("ultrafast").FrameRate(30).Resolution("1920x1080").VFrames(videoLength).
+				Overwrite(true).Run()
+			videos = append(videos, convetedVideoPath)
 		}
 	}
 
